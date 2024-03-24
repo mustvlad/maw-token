@@ -17,8 +17,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: [UNLOCK_IN_X_DAYS],
     log: true,
     value: lockedAmount,
-    maxPriorityFeePerGas: "10000000000",
-    maxFeePerGas: "10000000000",
   });
 
   console.log(`Lock contract: `, lock.address);

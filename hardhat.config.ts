@@ -1,5 +1,6 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "@nomicfoundation/hardhat-verify";
+import "@openzeppelin/hardhat-upgrades";
 import "hardhat-deploy";
 import { vars } from "hardhat/config";
 import type { HardhatUserConfig } from "hardhat/config";
@@ -50,6 +51,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
     },
     chainId: chainIds[chain],
     url: jsonRpcUrl,
+    gasPrice: chain === "bsc-testnet" ? 10000000000 : undefined,
   };
 }
 
@@ -108,7 +110,7 @@ const config: HardhatUserConfig = {
     tests: "./test",
   },
   solidity: {
-    version: "0.8.19",
+    version: "0.8.20",
     settings: {
       metadata: {
         // Not including the metadata hash
