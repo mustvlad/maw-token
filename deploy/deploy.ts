@@ -10,11 +10,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deploy } = hre.deployments;
   const lockedAmount = hre.ethers.parseEther("0.01").toString();
 
+  console.log(`Deploying Lock and locking 0.01 ETH for ${UNLOCK_IN_X_DAYS} seconds`);
+
   const lock = await deploy("Lock", {
     from: deployer,
     args: [UNLOCK_IN_X_DAYS],
     log: true,
     value: lockedAmount,
+    maxPriorityFeePerGas: "10000000000",
+    maxFeePerGas: "10000000000",
   });
 
   console.log(`Lock contract: `, lock.address);

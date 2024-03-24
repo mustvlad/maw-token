@@ -1,4 +1,5 @@
 import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
 import { vars } from "hardhat/config";
 import type { HardhatUserConfig } from "hardhat/config";
