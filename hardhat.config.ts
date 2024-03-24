@@ -1,7 +1,7 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
-import type { HardhatUserConfig } from "hardhat/config";
 import { vars } from "hardhat/config";
+import type { HardhatUserConfig } from "hardhat/config";
 import type { NetworkUserConfig } from "hardhat/types";
 
 import "./tasks/accounts";
@@ -10,12 +10,13 @@ import "./tasks/lock";
 // Run 'npx hardhat vars setup' to see the list of variables that need to be set
 
 const mnemonic: string = vars.get("MNEMONIC");
-const infuraApiKey: string = vars.get("INFURA_API_KEY");
+const infuraApiKey: string = vars.get("INFURA_API_KEY", "");
 
 const chainIds = {
   "arbitrum-mainnet": 42161,
   avalanche: 43114,
   bsc: 56,
+  "bsc-testnet": 97,
   ganache: 1337,
   hardhat: 31337,
   mainnet: 1,
@@ -32,7 +33,10 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
       jsonRpcUrl = "https://api.avax.network/ext/bc/C/rpc";
       break;
     case "bsc":
-      jsonRpcUrl = "https://bsc-dataseed1.binance.org";
+      jsonRpcUrl = "https://bsc-dataseed.bnbchain.org";
+      break;
+    case "bsc-testnet":
+      jsonRpcUrl = "https://data-seed-prebsc-1-s1.bnbchain.org:8545";
       break;
     default:
       jsonRpcUrl = "https://" + chain + ".infura.io/v3/" + infuraApiKey;
@@ -58,6 +62,7 @@ const config: HardhatUserConfig = {
       arbitrumOne: vars.get("ARBISCAN_API_KEY", ""),
       avalanche: vars.get("SNOWTRACE_API_KEY", ""),
       bsc: vars.get("BSCSCAN_API_KEY", ""),
+      bscTestnet: vars.get("BSCSCAN_API_KEY", ""),
       mainnet: vars.get("ETHERSCAN_API_KEY", ""),
       optimisticEthereum: vars.get("OPTIMISM_API_KEY", ""),
       polygon: vars.get("POLYGONSCAN_API_KEY", ""),
@@ -67,7 +72,7 @@ const config: HardhatUserConfig = {
   },
   gasReporter: {
     currency: "USD",
-    enabled: process.env.REPORT_GAS ? true : false,
+    enabled: !!process.env.REPORT_GAS,
     excludeContracts: [],
     src: "./contracts",
   },
@@ -88,6 +93,7 @@ const config: HardhatUserConfig = {
     arbitrum: getChainConfig("arbitrum-mainnet"),
     avalanche: getChainConfig("avalanche"),
     bsc: getChainConfig("bsc"),
+    "bsc-testnet": getChainConfig("bsc-testnet"),
     mainnet: getChainConfig("mainnet"),
     optimism: getChainConfig("optimism-mainnet"),
     "polygon-mainnet": getChainConfig("polygon-mainnet"),
